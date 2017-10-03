@@ -1,9 +1,16 @@
+"""
+League of Lords' Flask app
+"""
+
 from flask import Flask, render_template
+
+
 app = Flask(__name__)
 
 @app.route('/')
-def hello():
-    return render_template('comingsoon.html')
+def main():
+    """This the the homepage"""
+    return render_template("home.html")
 
 if __name__ == '__main__':
-    app.run(host='10.0.0.136')
+    app.run(debug=True)
