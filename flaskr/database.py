@@ -69,3 +69,8 @@ class Database():
 
         add_matchup = matchups.insert().values(year=year,week=week,team_one=team_one,team_one_score=team_one_score,team_two=team_two,team_two_score=team_two_score)
         self.con.execute(add_matchup)
+
+    def getMatchups(self):
+        matchups = self.meta.tables['matchups']
+
+        return self.con.execute(matchups.select())

@@ -48,8 +48,8 @@ def createUser():
 
 @app.route('/addMatchup', methods=['POST', 'GET'])
 def addMatchup():
-    #if not session.get('logged_in'):
-        #return("Yo dog you need to be an admin fo this")
+    if not session.get('logged_in'):
+        return("Yo dog you need to be an admin fo this")
 
     if request.method == 'POST':
         db = Database()
@@ -65,6 +65,13 @@ def addMatchup():
 
     else:
         return render_template('addMatchup.html')
+
+@app.route('/showMatchups', methods=['GET'])
+def showMatchups():
+    db = Database()
+    matchups = db.getMatchups()
+
+    return render_template('showMatchups.html',matchups=matchups)
 
 if __name__ == '__main__':
     app.secret_key = urandom(pwds.KeySeed)
