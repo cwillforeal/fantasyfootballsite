@@ -46,6 +46,26 @@ def createUser():
     else:
         return render_template('createUser.html')
 
+@app.route('/addMatchup', methods=['POST', 'GET'])
+def addMatchup():
+    #if not session.get('logged_in'):
+        #return("Yo dog you need to be an admin fo this")
+
+    if request.method == 'POST':
+        db = Database()
+        year=int(request.form['year'])
+        week=int(request.form['week'])
+        team_one=request.form['team1']
+        team_one_score=float(request.form['team1score'])
+        team_two=request.form['team2']
+        team_two_score=float(request.form['team2score']) 
+        db.addMatchup(year=year,week=week,team_one=team_one,team_one_score=team_one_score,team_two=team_two,team_two_score=team_two_score)    
+
+        return ("Success")
+
+    else:
+        return render_template('addMatchup.html')
+
 if __name__ == '__main__':
     app.secret_key = urandom(pwds.KeySeed)
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -1,0 +1,32 @@
+{% block body %}
+<!DOCTYPE html>
+<html>
+<title>Enter Post</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
+</style>
+<body>
+<div>
+	<form action = "/addMatchup" method = "POST" enctype=multipart/form-data>
+		<p>Enter Matchup data</p>
+		<p>Enter Year</p>
+		<p><input type = "text" name = "year" /></p>
+		<p>Enter Week</p>
+		<p><input type = "text" name = "week" /></p>
+		<p>Enter Team 1</p>
+		<p><input type = "text" name = "team1" /></p>
+		<p>Enter Team 1 Score</p>
+		<p><input type = "text" name = "team1score" /></p>
+		<p>Enter Team 2</p>
+		<p><input type = "text" name = "team2" /></p>
+		<p>Enter Team 2 score</p>
+		<p><input type = "text" name = "team2score" /></p>
+		<p><input type = "submit" name = "Submit" value = "Submit" /></p>
+	</form>
+</div>
+</body>
+{% endblock %}

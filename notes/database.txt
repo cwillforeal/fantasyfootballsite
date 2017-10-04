@@ -5,23 +5,20 @@ Database:
 |  +--Name
 |  |
 |  +--Password Hash
+|  | 
+|  +--Salt
 |
-+--records
-   |
-   +--year
-      |
-      +--week1
-      |  .
-      |  .
-      |  .
-      +--week14
-         |
-         +--matchup
-            |
-            +--user_name_1
-            |
-            +--user_1_score
-            |
-            +--user_name_2
-            |
-            +--user_2_score
++--matchup
+	|
+	+--year
+	|
+	+--week
+	|
+	+--user_name_1
+	|
+	+--user_1_score
+	|
+	+--user_name_2
+	|
+	+--user_2_score
+
