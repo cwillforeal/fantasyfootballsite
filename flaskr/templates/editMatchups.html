@@ -1,0 +1,33 @@
+{% block body %}
+<!DOCTYPE html>
+<html>
+<title>Show Matchups</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
+</style>
+<body>
+<div>
+	<table style="width:100%">
+		<tr><th>Year</th><th>Week</th><th>Home Team</th><th>Away Team</th><th>Home Score</th><th>Away Score</th><th>Submit</th><th>Delete</th></tr>
+		{% for matchup in matchups %}
+		<form action = "/editMatchups" method = "POST" enctype=multipart/form-data>
+			<tr><th><input type="number" name="year"           value="{{matchup.year}}"/></th>
+			    <th><input type="number" name="week"           value="{{matchup.week}}"/></th>
+			    <th><input type="text"   name="team_one"       value="{{matchup.team_one}}"/></th>
+			    <th><input type="text"   name="team_two"       value="{{matchup.team_two}}"/></th>
+			    <th><input type="number" step="0.1" name="team_one_score" value="{{matchup.team_one_score}}"/></th>
+			    <th><input type="number" step="0.1" name="team_two_score" value="{{matchup.team_two_score}}"/></th>
+			    <th><input type="submit" name="submit"         value="Submit" /></th>
+			    <th><input type="submit" name="delete"         value="Delete" /></th>
+			    <input type="hidden" name="id" value="{{matchup.id}}" />
+			</tr>
+		</form>
+		{% endfor %}
+	</table>
+</div>
+</body>
+{% endblock %}

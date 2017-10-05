@@ -73,6 +73,39 @@ def showMatchups():
 
     return render_template('showMatchups.html',matchups=matchups)
 
+@app.route('/editMatchups', methods=['POST','GET'])
+def editMatchups():
+    #if not session.get('logged_in'):
+        #return("Yo dog you need to be an admin fo this")
+    db = Database()
+
+    if request.method == 'POST':
+        if 'submit' in request.form:
+            id=request.form['id']
+            year=int(request.form['year'])
+            week=int(request.form['week'])
+            team_one=request.form['team_one']
+            team_one_score=float(request.form['team_one_score'])
+            team_two=request.form['team_two']
+            team_two_score=float(request.form['team_two_score']) 
+            result = db.editMatchup(id=id,year=year,week=week,team_one=team_one,team_one_score=team_one_score,team_two=team_two,team_two_score=team_two_score)    
+            if result == True:
+                return ("Success")
+            else:
+                return ("Edit failed") 
+
+        elif 'delete' in request.form:
+            result = db.deleteMatchup(request.form['id'])
+            if result == True:
+                return ("Success")
+            else:
+                return ("Delete Failed")    
+        else:
+            return ("Bad designer responsible for this shit")
+    else:
+        matchups = db.getMatchups()
+        return render_template('editMatchups.html',matchups=matchups)
+
 if __name__ == '__main__':
     app.secret_key = urandom(pwds.KeySeed)
     app.run(host='0.0.0.0', port=5000, debug=True)

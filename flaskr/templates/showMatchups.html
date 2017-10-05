@@ -12,9 +12,9 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
 <body>
 <div>
 	<table style="width:100%">
-		<tr><th>Home Team</th><th>Away Team</th><th>Home Score</th><th>Away Score</th></tr>
+		<tr><th>Year</th><th>Week</th><th>Home Team</th><th>Away Team</th><th>Home Score</th><th>Away Score</th></tr>
 		{% for matchup in matchups %}
-		<tr><th>{{matchup.team_one}}</th><th>{{matchup.team_two}}</th><th>{{matchup.team_one_score}}</th><th>{{matchup.team_two_score}}</th></tr>
+		<tr><th>{{matchup.year}}</th><th>{{matchup.week}}</th><th>{{matchup.team_one}}</th><th>{{matchup.team_two}}</th><th>{{matchup.team_one_score}}</th><th>{{matchup.team_two_score}}</th></tr>
 		{% endfor %}
 	</table>
 </div>

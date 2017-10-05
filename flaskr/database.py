@@ -34,6 +34,7 @@ class Database():
         if 'matchups' not in self.meta.tables:
             users = self.meta.tables['users'] 
             matchups = Table('matchups', self.meta,
+                Column('id', Integer, primary_key=True),
                 Column('team_one', String(50), ForeignKey("users.username"), nullable=False), 
                 Column('team_one_score', Float, nullable=False),
                 Column('team_two', String(50), ForeignKey('users.username'), nullable=False), 
@@ -74,3 +75,20 @@ class Database():
         matchups = self.meta.tables['matchups']
 
         return self.con.execute(matchups.select())
+    
+    def deleteMatchup(self,id):
+        matchups = self.meta.tables['matchups']
+
+        delete = matchups.delete().where(matchups.c.id == id)
+        self.con.execute(delete)
+        
+        return True
+
+    def editMatchup(self,id,year,week,team_one,team_one_score,team_two,team_two_score):
+        matchups = self.meta.tables['matchups']
+
+        print("Here")
+        edit_matchup = matchups.update().where(matchups.c.id == id).values(year=year,week=week,team_one=team_one,team_one_score=team_one_score,team_two=team_two,team_two_score=team_two_score)
+        self.con.execute(edit_matchup)
+    
+        return True
