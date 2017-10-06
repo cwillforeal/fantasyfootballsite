@@ -55,10 +55,10 @@ def addMatchup():
         db = Database()
         year=int(request.form['year'])
         week=int(request.form['week'])
-        team_one=request.form['team1']
-        team_one_score=float(request.form['team1score'])
-        team_two=request.form['team2']
-        team_two_score=float(request.form['team2score']) 
+        team_one=request.form['team_one']
+        team_one_score=float(request.form['team_one_score'])
+        team_two=request.form['team_two']
+        team_two_score=float(request.form['team_two_score']) 
         db.addMatchup(year=year,week=week,team_one=team_one,team_one_score=team_one_score,team_two=team_two,team_two_score=team_two_score)    
 
         return ("Success")
@@ -75,8 +75,8 @@ def showMatchups():
 
 @app.route('/editMatchups', methods=['POST','GET'])
 def editMatchups():
-    #if not session.get('logged_in'):
-        #return("Yo dog you need to be an admin fo this")
+    if not session.get('logged_in'):
+        return("Yo dog you need to be an admin fo this")
     db = Database()
 
     if request.method == 'POST':
