@@ -18,7 +18,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
 	<table style="width:100%" id="year_results">
 		<tr><th>Week</th><th>Opponent</th><th>Result</th><th>Score</th></tr>
 		{% for week in year.week_results %}
-		<tr><th>{{week.week}}</th><th>{{week.opponent}}</th><th>{% if week.win %}W{% else %}L{% endif %}</th><th>{{week.team_score}}-{{week.opponent_score}}</th></tr>
+		<tr><td>{{week.week}}</td><td>{{week.opponent}}</td><td>{% if week.win %}W{% else %}L{% endif %}</td><td>{{week.team_score}}-{{week.opponent_score}}</td></tr>
 		{% endfor %}
 	</table>
 	{% endfor %}

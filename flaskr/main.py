@@ -7,6 +7,7 @@ from os import urandom
 from database import Database
 from sortHistory import sortTeamHistory
 import imp
+import os
 pwds = imp.load_source('pwds', '../pwds.py')
 
 app = Flask(__name__)
@@ -122,6 +123,7 @@ def playerHistory():
     users = db.getUsers()
     return render_template('selectPlayerHistory.html',users=users)
 
+@app.context_processor
 def override_url_for():
     return dict(url_for=dated_url_for)
 

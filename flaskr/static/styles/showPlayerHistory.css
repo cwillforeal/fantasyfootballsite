@@ -1,3 +1,18 @@
 body {
-	background-color: powderblue;
+	background-color: white;
 }
+#year_results {
+	border-collapse: collapse;
+}
+#year_results th, #year_results td {
+	border: 1px solid #ddd;
+	padding: 8px;
+}
+#year_results th {
+	text-align: left;
+	background-color: #4CAF50;
+	color: white;
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+#year_results tr:hover {background-color: #ddd;}

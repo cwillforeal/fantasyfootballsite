@@ -2,12 +2,13 @@ from database import Database
 import operator
 
 class WeekResult:
-    def __init__(self, week, win, opponent_score, team_score, opponent):
+    def __init__(self, week, win, opponent_score, team_score, opponent_key, opponent):
         self.week=week
         self.win=win
         self.opponent_score=opponent_score
         self.team_score=team_score
         self.opponent=opponent
+        self.opponent_key=opponent_key
 
 class YearResults:
     def __init__(self, year, wins, losses, week_results, team):
@@ -23,6 +24,7 @@ def sortTeamHistory(team):
 
     db = Database()
     years_played = db.getUserYears(team)
+    users = db.getUsers()
     #TODO: Find out why years_played come back as list of tuple of (year,)
     #Convert from list of tuples to list
     for year in years_played:
@@ -34,9 +36,9 @@ def sortTeamHistory(team):
         matchups = db.getUserMatchupsInYear(team,year)
         for matchup in matchups:
             if matchup.team_one == team:
-                week = WeekResult(matchup.week,(matchup.team_one_score > matchup.team_two_score),matchup.team_two_score,matchup.team_one_score,matchup.team_two)
+                week = WeekResult(matchup.week,(matchup.team_one_score > matchup.team_two_score),matchup.team_two_score,matchup.team_one_score,matchup.team_two,db.getUser(matchup.team_two).name)
             else:
-                week = WeekResult(matchup.week,(matchup.team_one_score > matchup.team_two_score),matchup.team_two_score,matchup.team_one_score,matchup.team_two)
+                week = WeekResult(matchup.week,(matchup.team_two_score > matchup.team_one_score),matchup.team_one_score,matchup.team_two_score,matchup.team_one,db.getUser(matchup.team_one).name)
 
             week_results.append(week)    
 
