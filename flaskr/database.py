@@ -1,5 +1,5 @@
 import sqlalchemy
-from sqlalchemy import Table,Column,String,Text,LargeBinary, ForeignKey, Integer, Float
+from sqlalchemy import Table,Column,String,Text,LargeBinary, ForeignKey, Integer, Float, or_
 from sqlalchemy.orm import sessionmaker
 import hashlib
 import uuid
@@ -27,6 +27,7 @@ class Database():
             users = Table('users', self.meta,
                 Column('username', String(50), unique=True, nullable=False, primary_key=True),
                 Column('password', Text, nullable=False),
+                Column('name', String(50)),
                 Column('salt', Text, nullable=False))
 
             self.meta.create_all(self.con)
@@ -65,6 +66,16 @@ class Database():
         salt = cur_user.salt 
         return password_hash == hashlib.sha256(salt.encode() + password.encode()).hexdigest()
 
+    def getUsers(self):
+        users = self.meta.tables['users']
+
+        return self.con.execute(users.select())
+
+    def getUser(self,user):
+        users = self.meta.tables['users']
+
+        return (self.session.query(users).filter(users.c.username == user).first())
+
     def addMatchup(self,year,week,team_one,team_one_score,team_two,team_two_score):
         matchups = self.meta.tables['matchups']
 
@@ -91,4 +102,20 @@ class Database():
         edit_matchup = matchups.update().where(matchups.c.id == id).values(year=year,week=week,team_one=team_one,team_one_score=team_one_score,team_two=team_two,team_two_score=team_two_score)
         self.con.execute(edit_matchup)
     
-        return True
+    def getUserHistory(self,user):
+        matchups = self.meta.tables['matchups']
+
+        user_matchups = matchups.select().where(or_(matchups.c.team_one == user,matchups.c.team_two == user))
+        return self.con.execute(user_matchups) 
+
+    def getUserYears(self,user):
+        matchups = self.meta.tables['matchups']
+
+        return self.session.query(matchups.c.year).distinct().all()
+
+    def getUserMatchupsInYear(self,user,year):
+        matchups = self.meta.tables['matchups']
+
+        matchups_year = matchups.select().where(or_(matchups.c.team_one == user,matchups.c.team_two == user)).where(matchups.c.year==year)
+        return self.con.execute(matchups_year)
+

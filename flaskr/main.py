@@ -5,6 +5,7 @@ League of Lords' Flask app
 from flask import Flask, render_template, redirect, url_for, request, session, abort
 from os import urandom
 from database import Database
+from sortHistory import sortTeamHistory
 import imp
 pwds = imp.load_source('pwds', '../pwds.py')
 
@@ -105,6 +106,33 @@ def editMatchups():
     else:
         matchups = db.getMatchups()
         return render_template('editMatchups.html',matchups=matchups)
+
+#TODO: Figure out best way to deal w/ database sortTeamHistory also has an instance of db
+@app.route('/PlayerHistory/<player>',methods=['GET'])
+def displayPlayerHistory(player):
+    db = Database()
+    user = db.getUser(player)
+    history = sortTeamHistory(player) 
+    return render_template('showPlayerHistory.html',years=history,user=user)
+
+@app.route('/PlayerHistory',methods=['GET'])
+def playerHistory():
+    db = Database()
+    
+    users = db.getUsers()
+    return render_template('selectPlayerHistory.html',users=users)
+
+def override_url_for():
+    return dict(url_for=dated_url_for)
+
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = os.path.join(app.root_path,
+                                     endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+    return url_for(endpoint, **values)
 
 if __name__ == '__main__':
     app.secret_key = urandom(pwds.KeySeed)

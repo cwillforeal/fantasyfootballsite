@@ -1,0 +1,27 @@
+{% block body %}
+<!DOCTYPE html>
+<html>
+<title>Show Matchups</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/showPlayerHistory.css') }}">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
+</style>
+<body>
+<div><h1>{{user.name}}</h1></div>
+<div>
+	{% for year in years %}
+	<h2>Year: {{year.year}}</h2>
+	<h3>Wins: {{year.wins}} Losses: {{year.losses}}</h3>
+	<table style="width:100%" id="year_results">
+		<tr><th>Week</th><th>Opponent</th><th>Result</th><th>Score</th></tr>
+		{% for week in year.week_results %}
+		<tr><th>{{week.week}}</th><th>{{week.opponent}}</th><th>{% if week.win %}W{% else %}L{% endif %}</th><th>{{week.team_score}}-{{week.opponent_score}}</th></tr>
+		{% endfor %}
+	</table>
+	{% endfor %}
+</div>
+</body>
+{% endblock %}
