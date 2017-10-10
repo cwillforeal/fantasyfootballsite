@@ -4,3 +4,6 @@ venv/
 *.swo
 pwds.py
 *.swn
+gunicorn.log
+gunicorn_config.py
+wsgi.py

@@ -11,6 +11,7 @@ import os
 pwds = imp.load_source('pwds', '../pwds.py')
 
 app = Flask(__name__)
+app.secret_key = urandom(pwds.KeySeed)
 
 @app.route('/')
 def main():
@@ -137,5 +138,4 @@ def dated_url_for(endpoint, **values):
     return url_for(endpoint, **values)
 
 if __name__ == '__main__':
-    app.secret_key = urandom(pwds.KeySeed)
     app.run(host='0.0.0.0', port=5000, debug=True)
