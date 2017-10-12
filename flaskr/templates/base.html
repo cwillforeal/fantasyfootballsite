@@ -3,7 +3,7 @@
 <head>
     {% block head %}
     <meta charset="UTF-8">
-    <link href="../static/css/base.css" rel="stylesheet">
+    <link href="{{url_for('static',filename='styles/base.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     {% block otherlinks %}{% endblock %}
@@ -24,23 +24,29 @@
 <body>
 
 <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
-  <div class="w3-display-topleft w3-padding-small w3-xlarge">
-    THE League of Lords
-  </div>
-  <div id="navbar" class="w3-bar w3-black">
-    <a href="/login" class="w3-bar-item w3-button w3-right w3-large w3-padding-12">Login</a>
-    <a href="#" class="w3-bar-item w3-button w3-right w3-large w3-padding-12">Link 4</a>
-    <a href="#" class="w3-bar-item w3-button w3-right w3-large w3-padding-12">Link 3</a>
-    <a href="#" class="w3-bar-item w3-button w3-right w3-large w3-padding-12">Link 2</a>
-    <a href="#" class="w3-bar-item w3-button w3-right w3-large w3-padding-12">Link 1</a>
-    <a href="#" class="w3-bar-item w3-button w3-right w3-large w3-padding-12">Home</a>
+  <div id="navbar" class="navbar">
+	<div class="w3-display-topleft w3-padding-small w3-xlarge">THE League of Lords</div>
+    <a href="/login" >Login</a>
+    <a href="#" >Link 4</a>
+    <a href="#" >Link 3</a>
+    <a href="#" >Link 2</a>
+    <div class="dropdown">
+    <button class="dropbtn">Player History</button>
+	<div class="dropdown-content">
+		{% for user in users %}
+			{% if user.username != 'admin' %}
+				<a href="/PlayerHistory/{{user.username}}">{{user.name}}</a>
+			{% endif %}
+		{% endfor %}
+	</div>
+    </div>
+    <a href="/" class="">Home</a>
   </div>
   <div id="content">{% block content %}{% endblock %}</div>
   <div class="w3-display-bottomleft w3-padding-large">
     Email the Commissioner of the League of Lords here: <a href="https://mail.google.com/mail/?view=cm&fs=1&to=someone@example.com&su=SUBJECT&body=BODY&bcc=amac360@gmail.com">amac360@gmail.com</a>
   </div>
 </div>
-
 </body>
 </html>
 

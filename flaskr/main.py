@@ -11,12 +11,14 @@ import os
 pwds = imp.load_source('pwds', '../pwds.py')
 
 app = Flask(__name__)
+app.secret_key = urandom(pwds.KeySeed)
 
 @app.route('/')
 def main():
     db = Database()
     """This the the homepage"""
-    return render_template("home.html")
+    users = db.getUsers()
+    return render_template("home.html", users=users)
 
 @app.route('/login', methods=['POST','GET'])
 def login():
@@ -116,13 +118,6 @@ def displayPlayerHistory(player):
     history = sortTeamHistory(player) 
     return render_template('showPlayerHistory.html',years=history,user=user)
 
-@app.route('/PlayerHistory',methods=['GET'])
-def playerHistory():
-    db = Database()
-    
-    users = db.getUsers()
-    return render_template('selectPlayerHistory.html',users=users)
-
 @app.context_processor
 def override_url_for():
     return dict(url_for=dated_url_for)
@@ -137,5 +132,4 @@ def dated_url_for(endpoint, **values):
     return url_for(endpoint, **values)
 
 if __name__ == '__main__':
-    app.secret_key = urandom(pwds.KeySeed)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)
