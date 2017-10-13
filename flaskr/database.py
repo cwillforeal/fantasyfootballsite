@@ -1,5 +1,6 @@
 import sqlalchemy
-from sqlalchemy import Table,Column,String,Text,LargeBinary, ForeignKey, Integer, Float, or_
+from sqlalchemy import Table,Column,String,Text,LargeBinary, ForeignKey, Integer, Float, or_ 
+from sqlalchemy.pool import NullPool
 from sqlalchemy.orm import sessionmaker
 import hashlib
 import uuid
@@ -10,10 +11,12 @@ url_postgres = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % pwds.PO
 
 #Create Database comm class
 #TODO: Catch if we can't talk to the database
+#TODO: Clean up this connections mess, shouldn't need 3 different ones
 class Database():
     def __init__(self):
         #Connect to the database, currently using default settings
-        self.con = sqlalchemy.create_engine(url_postgres, client_encoding='utf8')
+        self.con = sqlalchemy.create_engine(url_postgres, client_encoding='utf8', poolclass=NullPool)
+        print("Init DB")
 
         #Bind the connection ot MetaData()
         self.meta = sqlalchemy.MetaData(bind=self.con, reflect=True)
@@ -44,6 +47,10 @@ class Database():
                 Column('week', Integer, nullable=False))
             
             self.meta.create_all(self.con)
+
+    def close(self):
+        self.con.dispose()
+        self.meta.close()
 
     def addUser(self,username,password):
         users = self.meta.tables['users']
@@ -98,7 +105,6 @@ class Database():
     def editMatchup(self,id,year,week,team_one,team_one_score,team_two,team_two_score):
         matchups = self.meta.tables['matchups']
 
-        print("Here")
         edit_matchup = matchups.update().where(matchups.c.id == id).values(year=year,week=week,team_one=team_one,team_one_score=team_one_score,team_two=team_two,team_two_score=team_two_score)
         self.con.execute(edit_matchup)
     

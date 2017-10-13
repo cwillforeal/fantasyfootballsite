@@ -15,7 +15,6 @@ app.secret_key = urandom(pwds.KeySeed)
 
 @app.route('/')
 def main():
-    db = Database()
     """This the the homepage"""
     users = db.getUsers()
     return render_template("home.html", users=users)
@@ -26,7 +25,6 @@ def login():
         return ("Already logged in")
 
     if request.method == 'POST':
-        db = Database()
         log_in = db.checkUser(username=request.form['username'],password=request.form['password'])
         if log_in == True:
             session['logged_in'] = True
@@ -43,7 +41,6 @@ def createUser():
         return ("Yo you ain't logged in")
 
     if request.method == 'POST':
-        db = Database()
         db.addUser(username=request.form['username'],password=request.form['password'])
         return "Success"        
 
@@ -56,7 +53,6 @@ def addMatchup():
         return("Yo dog you need to be an admin fo this")
 
     if request.method == 'POST':
-        db = Database()
         year=int(request.form['year'])
         week=int(request.form['week'])
         team_one=request.form['team_one']
@@ -72,7 +68,6 @@ def addMatchup():
 
 @app.route('/showMatchups', methods=['GET'])
 def showMatchups():
-    db = Database()
     matchups = db.getMatchups()
 
     return render_template('showMatchups.html',matchups=matchups)
@@ -81,7 +76,6 @@ def showMatchups():
 def editMatchups():
     if not session.get('logged_in'):
         return("Yo dog you need to be an admin fo this")
-    db = Database()
 
     if request.method == 'POST':
         if 'submit' in request.form:
@@ -113,10 +107,10 @@ def editMatchups():
 #TODO: Figure out best way to deal w/ database sortTeamHistory also has an instance of db
 @app.route('/PlayerHistory/<player>',methods=['GET'])
 def displayPlayerHistory(player):
-    db = Database()
     user = db.getUser(player)
-    history = sortTeamHistory(player) 
-    return render_template('showPlayerHistory.html',years=history,user=user)
+    history = sortTeamHistory(player,db) 
+    users = db.getUsers()
+    return render_template('playerHistory.html',users=users,years=history,user=user)
 
 @app.context_processor
 def override_url_for():
@@ -130,6 +124,12 @@ def dated_url_for(endpoint, **values):
                                      endpoint, filename)
             values['q'] = int(os.stat(file_path).st_mtime)
     return url_for(endpoint, **values)
+
+@app.before_first_request
+def create_db():
+    print("INIT ONCE")
+    global db
+    db = Database()
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Player History{% endblock %}
+{% block content %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/playerHistory.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif; color: black}
+</style>
+<body>
+<div><h1>{{user.name}}</h1></div>
+<div>
+    {% for year in years %}
+    <h2>Year: {{year.year}}</h2>
+    <h3>Wins: {{year.wins}} Losses: {{year.losses}}</h3>
+    <table style="width:100%" id="year_results">
+        <tr><th>Week</th><th>Opponent</th><th>Result</th><th>Score</th></tr>
+        {% for week in year.week_results %}
+        <tr>
+			<td>{% if week.week >= 200 %}Consultation{% elif week.week >= 100 %}Playoffs{% else %}{{week.week}}{% endif %}</td>
+			<td>{{week.opponent}}</td>
+			<td>{% if week.win %}W{% else %}L{% endif %}</td>
+			<td>{{week.team_score}}-{{week.opponent_score}}</td>
+		</tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+</div>
+</body>
+{% endblock %}
+

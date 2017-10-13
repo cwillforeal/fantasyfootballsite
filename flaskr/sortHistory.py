@@ -18,11 +18,10 @@ class YearResults:
         self.week_results=week_results
         self.team=team
     
-def sortTeamHistory(team):
+def sortTeamHistory(team,db):
     years=[]
     temp_years=[]
 
-    db = Database()
     years_played = db.getUserYears(team)
     users = db.getUsers()
     #TODO: Find out why years_played come back as list of tuple of (year,)
