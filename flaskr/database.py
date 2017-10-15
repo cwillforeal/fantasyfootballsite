@@ -1,5 +1,5 @@
 import sqlalchemy
-from sqlalchemy import Table,Column,String,Text,LargeBinary, ForeignKey, Integer, Float, or_ 
+from sqlalchemy import Table,Column,String,Text,LargeBinary, ForeignKey, Integer, Float, or_, and_ 
 from sqlalchemy.pool import NullPool
 from sqlalchemy.orm import sessionmaker
 import hashlib
@@ -16,7 +16,6 @@ class Database():
     def __init__(self):
         #Connect to the database, currently using default settings
         self.con = sqlalchemy.create_engine(url_postgres, client_encoding='utf8', poolclass=NullPool)
-        print("Init DB")
 
         #Bind the connection ot MetaData()
         self.meta = sqlalchemy.MetaData(bind=self.con, reflect=True)
@@ -47,10 +46,6 @@ class Database():
                 Column('week', Integer, nullable=False))
             
             self.meta.create_all(self.con)
-
-    def close(self):
-        self.con.dispose()
-        self.meta.close()
 
     def addUser(self,username,password):
         users = self.meta.tables['users']
@@ -116,8 +111,15 @@ class Database():
 
     def getUserYears(self,user):
         matchups = self.meta.tables['matchups']
+        years = []
+        league_years = self.session.query(matchups.c.year).distinct().all() 
+        for year in league_years:
+            results = self.con.execute(matchups.select().where(and_(or_(matchups.c.team_one == user,matchups.c.team_two == user),matchups.c.year == year[0])))
+            for matchup in results:
+                if matchup.year not in years:
+                    years.append(matchup.year)
 
-        return self.session.query(matchups.c.year).distinct().all()
+        return years
 
     def getUserMatchupsInYear(self,user,year):
         matchups = self.meta.tables['matchups']

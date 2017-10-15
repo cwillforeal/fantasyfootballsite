@@ -5,7 +5,7 @@ League of Lords' Flask app
 from flask import Flask, render_template, redirect, url_for, request, session, abort
 from os import urandom
 from database import Database
-from sortHistory import sortTeamHistory
+from sortHistory import sortTeamHistory, getUserHistory
 import imp
 import os
 pwds = imp.load_source('pwds', '../pwds.py')
@@ -86,12 +86,7 @@ def editMatchups():
             team_one_score=float(request.form['team_one_score'])
             team_two=request.form['team_two']
             team_two_score=float(request.form['team_two_score']) 
-            result = db.editMatchup(id=id,year=year,week=week,team_one=team_one,team_one_score=team_one_score,team_two=team_two,team_two_score=team_two_score)    
-            if result == True:
-                return ("Success")
-            else:
-                return ("Edit failed") 
-
+            db.editMatchup(id=id,year=year,week=week,team_one=team_one,team_one_score=team_one_score,team_two=team_two,team_two_score=team_two_score)    
         elif 'delete' in request.form:
             result = db.deleteMatchup(request.form['id'])
             if result == True:
@@ -112,6 +107,20 @@ def displayPlayerHistory(player):
     users = db.getUsers()
     return render_template('playerHistory.html',users=users,years=history,user=user)
 
+@app.route('/LeagueHistory',methods=['GET'])
+def leagueHistory():
+    users = db.getUsers()
+    league_history = []
+    
+    for user in users:
+        if user.username != 'admin':
+            user_years = sortTeamHistory(user.username,db)  #Something about this ruins users for the drop down nav bar display
+            user_history = getUserHistory(user_years, user.username)
+            user_history.user = user.name
+            league_history.append(user_history)
+    users = db.getUsers()
+    return render_template('leagueHistory.html', league_history=league_history, users=users)
+
 @app.context_processor
 def override_url_for():
     return dict(url_for=dated_url_for)
@@ -127,7 +136,6 @@ def dated_url_for(endpoint, **values):
 
 @app.before_first_request
 def create_db():
-    print("INIT ONCE")
     global db
     db = Database()
 

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}League History{% endblock %}
+{% block content %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/leagueHistory.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif; color: black}
+</style>
+<body>
+	<h1>League History</h1>
+	<table id="league_history" width=100%>
+		<tr><th>Player</th><th>W</th><th>L</th><th>PCT</th><th>W</th><th>L</th><th>PCT</th><th>W</th><th>L</th><th>PCT</th><th>Points For</th><th>PPG</th><th>Points Against</th><th>PAPG</th><th>Seasons</th><th>Best Week</th><th>Worst Week</th><th>Titles</th></tr>
+		{% for team in league_history %}
+		<tr>
+			<td>{{team.user}}</td>
+			<td>?</td>
+			<td>?</td>
+			<td>?</td>
+			<td>{{team.reg_season_wins}}</td>
+			<td>{{team.reg_season_loses}}</td>
+			<td>?</td>
+			<td>{{team.playoff_wins}}</td>
+			<td>{{team.playoff_loses}}</td>
+			<td>?</td>
+			<td>{{team.points_for|round(1)}}</td>
+			<td>?</td>
+			<td>{{team.points_against|round(1)}}</td>
+			<td>?</td>
+			<td>{{team.seasons}}</td>
+			<td>{{team.best_week}}</td>
+			<td>{{team.worst_week}}</td>
+			<td>{{team.titles}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</body>
+{% endblock %}
+

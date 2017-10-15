@@ -1,0 +1,25 @@
+body {
+	background-color: white;
+}
+h1, h2, h3 {
+	padding-left: 12px;
+}
+#league_history table {
+	width: 100%;
+}
+#league_history {
+	border-collapse: collapse;
+}
+#league_history th, #league_history td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	color: black;
+}
+#league_history th {
+	text-align: left;
+	background-color: #4CAF50;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	color: black;
+}
+#league_history tr:hover {background-color: #ddd;}
