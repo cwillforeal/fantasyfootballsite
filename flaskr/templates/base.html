@@ -26,7 +26,7 @@
     <a href="/LeagueHistory" >League History</a>
     <div class="dropdown">
     <button class="dropbtn">Player History</button>
-	<div class="dropdown-content">
+	<div class="dropdown-content" >
 		{% for user in users %}
 			{% if user.username != 'admin' %}
 				<a href="/PlayerHistory/{{user.username}}">{{user.name}}</a>
