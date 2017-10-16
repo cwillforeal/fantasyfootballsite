@@ -13,19 +13,19 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif; color: black}
 		{% for team in league_history %}
 		<tr>
 			<td>{{team.user}}</td>
-			<td>?</td>
-			<td>?</td>
-			<td>?</td>
+			<td>{{team.reg_season_wins + team.playoff_wins}}</td>
+			<td>{{team.reg_season_loses + team.playoff_loses}}</td>
+			<td>{% if (team.reg_season_loses + team.playoff_loses) <= 0 %}N/A{%else%}{{(((team.reg_season_wins + team.playoff_wins)/(team.reg_season_loses + team.playoff_loses + team.reg_season_wins + team.playoff_wins))*100)|round(1)}}%{%endif%}</td>
 			<td>{{team.reg_season_wins}}</td>
 			<td>{{team.reg_season_loses}}</td>
-			<td>?</td>
+			<td>{% if team.reg_season_loses <= 0 %}N/A{%else%}{{((team.reg_season_wins/(team.reg_season_loses + team.reg_season_wins))*100)|round(1)}}%{%endif%}</td>
 			<td>{{team.playoff_wins}}</td>
 			<td>{{team.playoff_loses}}</td>
-			<td>?</td>
+			<td>{% if team.playoff_loses <= 0 %}N/A{%else%}{{((team.playoff_wins/(team.playoff_loses + team.playoff_wins))*100)|round(1)}}%{%endif%}</td>
 			<td>{{team.points_for|round(1)}}</td>
-			<td>?</td>
+			<td>{% if (team.reg_season_loses + team.playoff_loses) <= 0 %}N/A{%else%}{{(team.points_for/(team.reg_season_loses + team.playoff_loses + team.reg_season_wins + team.playoff_wins + team.con_wins + team.con_loses))|round(1)}}{%endif%}</td>
 			<td>{{team.points_against|round(1)}}</td>
-			<td>?</td>
+			<td>{% if (team.reg_season_loses + team.playoff_loses) <= 0 %}N/A{%else%}{{(team.points_against/(team.reg_season_loses + team.playoff_loses + team.reg_season_wins + team.playoff_wins + team.con_wins + team.con_loses))|round(1)}}{%endif%}</td>
 			<td>{{team.seasons}}</td>
 			<td>{{team.best_week}}</td>
 			<td>{{team.worst_week}}</td>

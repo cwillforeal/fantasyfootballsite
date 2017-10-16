@@ -30,8 +30,10 @@ class CareerResults:
         self.points_against=0
         self.seasons=0
         self.best_week=0
-        self.worst_week=10000
+        self.worst_week=0
         self.regular_season_titles=0
+        self.con_wins=0
+        self.con_loses=0
 
 def sortTeamHistory(team,db):
     years=[]
@@ -93,5 +95,10 @@ def getUserHistory(years_stats, user):
                         career_results.titles.append(year.year)
                 else:
                     career_results.playoff_loses = career_results.playoff_loses + 1
+            else:
+                if week.win == True:
+                    career_results.con_wins = career_results.con_wins + 1
+                else:
+                    career_results.con_loses = career_results.con_loses + 1
 
     return(career_results)
