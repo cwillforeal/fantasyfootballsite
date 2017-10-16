@@ -72,6 +72,7 @@ def sortTeamHistory(team,db):
 def getUserHistory(years_stats, user):
     career_results = CareerResults()
     career_results.user = user
+    first_run = True
     for year in years_stats:
         career_results.seasons = career_results.seasons + 1
         week_cnt = 0
@@ -81,8 +82,12 @@ def getUserHistory(years_stats, user):
             career_results.points_against = career_results.points_against + week.opponent_score
             if week.team_score > career_results.best_week:
                 career_results.best_week = week.team_score
-            if week.team_score < career_results.worst_week:
-                career_results.worst_week = week.team_score 
+            if first_run == True:
+                career_results.worst_week = week.team_score
+                first_run = False
+            else:
+                if week.team_score < career_results.worst_week:
+                    career_results.worst_week = week.team_score 
             if week.week < 100:
                 if week.win == True:
                     career_results.reg_season_wins = career_results.reg_season_wins + 1

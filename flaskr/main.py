@@ -87,6 +87,7 @@ def editMatchups():
             team_two=request.form['team_two']
             team_two_score=float(request.form['team_two_score']) 
             db.editMatchup(id=id,year=year,week=week,team_one=team_one,team_one_score=team_one_score,team_two=team_two,team_two_score=team_two_score)    
+            return ("Edit sucessful")
         elif 'delete' in request.form:
             result = db.deleteMatchup(request.form['id'])
             if result == True:

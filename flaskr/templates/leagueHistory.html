@@ -29,7 +29,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif; color: black}
 			<td>{{team.seasons}}</td>
 			<td>{{team.best_week}}</td>
 			<td>{{team.worst_week}}</td>
-			<td>{{team.titles}}</td>
+			<td>{%if team.titles == []%}{%else%}{{team.titles}}{%endif%}</td>
 		</tr>
 		{% endfor %}
 	</table>
