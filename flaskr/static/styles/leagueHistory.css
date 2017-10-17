@@ -22,4 +22,7 @@ h1, h2, h3 {
 	padding-bottom: 12px;
 	color: black;
 }
+#league_history #top_header th {
+	text-align: center;
+}
 #league_history tr:hover {background-color: #ddd;}
