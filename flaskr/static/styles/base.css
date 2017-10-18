@@ -12,12 +12,12 @@
     text-decoration: none;
 }
 
-.dropdown {
+.dropdown, .dropdown-sum {
     float: right;
     overflow: hidden;
 }
 
-.dropdown .dropbtn {
+.dropdown .dropbtn, .dropdown-sum .dropbtn-sum {
     font-size: 16px;    
     border: none;
     outline: none;
@@ -26,11 +26,11 @@
     background-color: inherit;
 }
 
-.navbar a:hover, .dropdown:hover .dropbtn {
+.navbar a:hover, .dropdown:hover .dropbtn, .dropdown-sum:hover .dropbtn-sum{
     background-color: #c0c0c0;
 }
 
-.dropdown-content {
+.dropdown-content, .dropdown-content-sum {
 	max-height: 250px;
 	overflow: auto;
     display: none;
@@ -41,7 +41,7 @@
     z-index: 1;
 }
 
-.dropdown-content a {
+.dropdown-content a, .dropdown-content-sum a{
     float: none;
     color: black;
     padding: 12px 16px;
@@ -50,10 +50,10 @@
     text-align: left;
 }
 
-.dropdown-content a:hover {
+.dropdown-content a:hover, .dropdown-content-sum a:hover {
     background-color: #ddd;
 }
 
-.dropdown:hover .dropdown-content {
+.dropdown:hover .dropdown-content , .dropdown-sum:hover .dropdown-content-sum{
     display: block;
 }

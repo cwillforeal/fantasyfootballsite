@@ -21,10 +21,16 @@
   <div id="navbar" class="navbar">
 	<div class="w3-display-topleft w3-padding-small w3-xlarge">THE League of Lords</div>
     <a href="/login" >Login</a>
-    <a href="#" >Link 4</a>
-    <a href="#" >Link 3</a>
     <a href="/LeagueHistory" >League History</a>
-    <div class="dropdown">
+    <div class="dropdown-sum">
+	<button class="dropbtn-sum">Year Summaries</button>
+		<div class="dropdown-content-sum">
+			{%for year in years%}
+				<a href="YearStats/{{year}}">{{year}}</a>
+			{%endfor%}
+		</div>
+	</div>
+	<div class="dropdown">
     <button class="dropbtn">Player History</button>
 	<div class="dropdown-content" >
 		{% for user in users %}
@@ -37,9 +43,6 @@
     <a href="/" class="">Home</a>
   </div>
   <div id="content">{% block content %}{% endblock %}</div>
-  <div class="w3-display-bottomleft w3-padding-large">
-    Email the Commissioner of the League of Lords here: <a href="https://mail.google.com/mail/?view=cm&fs=1&to=someone@example.com&su=SUBJECT&body=BODY&bcc=amac360@gmail.com">amac360@gmail.com</a>
-  </div>
 </div>
 </body>
 </html>

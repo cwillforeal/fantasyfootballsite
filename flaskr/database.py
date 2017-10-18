@@ -121,6 +121,17 @@ class Database():
 
         return years
 
+    def getLeagueYears(self):
+        matchups = self.meta.tables['matchups']
+        temp_years = self.session.query(matchups.c.year).distinct().all()
+        years = []
+        #For some reason comes in messed up tuple
+        for year in temp_years:
+            years.append(year[0])        
+
+        years.sort(reverse=True)
+        return years
+
     def getUserMatchupsInYear(self,user,year):
         matchups = self.meta.tables['matchups']
 

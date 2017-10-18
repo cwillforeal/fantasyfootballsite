@@ -5,7 +5,7 @@ League of Lords' Flask app
 from flask import Flask, render_template, redirect, url_for, request, session, abort
 from os import urandom
 from database import Database
-from sortHistory import sortTeamHistory, getUserHistory
+from sortHistory import sortTeamHistory, getUserHistory, getUserYearSummary
 import imp
 import os
 pwds = imp.load_source('pwds', '../pwds.py')
@@ -17,7 +17,8 @@ app.secret_key = urandom(pwds.KeySeed)
 def main():
     """This the the homepage"""
     users = db.getUsers()
-    return render_template("home.html", users=users)
+    years = db.getLeagueYears()
+    return render_template("home.html", users=users, years=years)
 
 @app.route('/login', methods=['POST','GET'])
 def login():
@@ -108,6 +109,21 @@ def displayPlayerHistory(player):
     users = db.getUsers()
     return render_template('playerHistory.html',users=users,years=history,user=user)
 
+@app.route('/YearStats/<year_sort>',methods=['GET'])
+def displayYearStats(year_sort):
+    users = db.getUsers()
+    year_summary = [] 
+    for user in users:
+        user_years = sortTeamHistory(user.username,db)
+        user_year_stats = [year for year in user_years if year.year==int(year_sort)]
+        if user_year_stats != []:
+            user_year_summary = getUserYearSummary(user_year_stats[0],user.username)
+            year_summary.append(user_year_summary)
+            
+    years = db.getLeagueYears()
+    users=db.getUsers()
+    return render_template('yearHistory.html',year=year_sort, users=users, years=years, year_summary=year_summary)
+
 @app.route('/LeagueHistory',methods=['GET'])
 def leagueHistory():
     users = db.getUsers()
@@ -120,7 +136,8 @@ def leagueHistory():
             user_history.user = user.name
             league_history.append(user_history)
     users = db.getUsers()
-    return render_template('leagueHistory.html', league_history=league_history, users=users)
+    years = db.getLeagueYears()
+    return render_template('leagueHistory.html', league_history=league_history, users=users, years=years)
 
 @app.context_processor
 def override_url_for():

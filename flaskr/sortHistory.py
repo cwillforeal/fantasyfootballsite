@@ -35,6 +35,23 @@ class CareerResults:
         self.con_wins=0
         self.con_loses=0
 
+class YearSummary:
+    def __init__(self):
+        self.user=None
+        self.winTitle=False 
+        self.reg_season_wins=0
+        self.reg_season_wins=0
+        self.reg_season_loses=0
+        self.playoff_wins=0
+        self.playoff_loses=0
+        self.points_for=0
+        self.points_against=0
+        self.best_week=0
+        self.worst_week=0
+        self.regular_season_titles=0
+        self.con_wins=0
+        self.con_loses=0
+        
 def sortTeamHistory(team,db):
     years=[]
 
@@ -69,6 +86,46 @@ def sortTeamHistory(team,db):
     
     return (years)
 
+#TODO: Combine with getUserHistory, main functionality is the same
+def getUserYearSummary(year_stats, user):
+    year_results = YearSummary()
+
+    year_results.user = user
+    week_cnt = 0
+    first_run = True
+    for week in year_stats.week_results:
+        week_cnt = week_cnt + 1 
+        year_results.points_for = year_results.points_for +  week.team_score
+        year_results.points_against = year_results.points_against + week.opponent_score
+        if week.team_score > year_results.best_week:
+            year_results.best_week = week.team_score
+        if first_run == True:
+            year_results.worst_week = week.team_score
+            first_run = False
+        else:
+            if week.team_score < year_results.worst_week:
+                year_results.worst_week = week.team_score 
+        if week.week < 100:
+            if week.win == True:
+                year_results.reg_season_wins = year_results.reg_season_wins + 1
+            else:
+                year_results.reg_season_loses = year_results.reg_season_loses + 1
+        elif week.week >= 100 and week.week < 200:
+            if week.win == True:
+                year_results.playoff_wins = year_results.playoff_wins + 1
+                if week_cnt >= len(year_stats.week_results):
+                    year_results.winTitle = True
+            else:
+                year_results.playoff_loses = year_results.playoff_loses + 1
+        else:
+            if week.win == True:
+                year_results.con_wins = year_results.con_wins + 1
+            else:
+                year_results.con_loses = year_results.con_loses + 1
+    
+    return year_results
+
+    
 def getUserHistory(years_stats, user):
     career_results = CareerResults()
     career_results.user = user
