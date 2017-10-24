@@ -9,7 +9,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif; color: black}
 <body>
 <div><h1>{{user.name}}</h1></div>
 <div>
-    {% for year in years %}
+    {% for year in user_years %}
     <h2>Year: {{year.year}}</h2>
     <h3>Wins: {{year.wins}} Losses: {{year.losses}}</h3>
     <table style="width:100%" id="year_results">

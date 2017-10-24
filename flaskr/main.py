@@ -107,17 +107,16 @@ def displayPlayerHistory(player):
     user = db.getUser(player)
     history = sortTeamHistory(player,db) 
     users = db.getUsers()
-    return render_template('playerHistory.html',users=users,years=history,user=user)
+    years = db.getLeagueYears()
+    return render_template('playerHistory.html',users=users,user_years=history,user=user, years=years)
 
 @app.route('/YearStats/<year_sort>',methods=['GET'])
 def displayYearStats(year_sort):
     users = db.getUsers()
     year_summary = [] 
     for user in users:
-        user_years = sortTeamHistory(user.username,db)
-        user_year_stats = [year for year in user_years if year.year==int(year_sort)]
-        if user_year_stats != []:
-            user_year_summary = getUserYearSummary(user_year_stats[0],user.username)
+        user_year_summary = db.getUserYearStats(user.username,year_sort)
+        if user_year_summary != None:
             year_summary.append(user_year_summary)
             
     years = db.getLeagueYears()
@@ -131,7 +130,7 @@ def leagueHistory():
     
     for user in users:
         if user.username != 'admin':
-            user_years = sortTeamHistory(user.username,db)  #Something about this ruins users for the drop down nav bar display
+            user_years = db.getUserHistory(user.username)
             user_history = getUserHistory(user_years, user.username)
             user_history.user = user.name
             league_history.append(user_history)

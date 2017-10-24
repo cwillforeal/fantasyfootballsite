@@ -25,28 +25,6 @@ class Database():
         Session.configure(bind=self.con)
         self.session = Session() 
 
-        if 'users' not in self.meta.tables:
-            users = Table('users', self.meta,
-                Column('username', String(50), unique=True, nullable=False, primary_key=True),
-                Column('password', Text, nullable=False),
-                Column('name', String(50)),
-                Column('salt', Text, nullable=False))
-
-            self.meta.create_all(self.con)
-
-        if 'matchups' not in self.meta.tables:
-            users = self.meta.tables['users'] 
-            matchups = Table('matchups', self.meta,
-                Column('id', Integer, primary_key=True),
-                Column('team_one', String(50), ForeignKey("users.username"), nullable=False), 
-                Column('team_one_score', Float, nullable=False),
-                Column('team_two', String(50), ForeignKey('users.username'), nullable=False), 
-                Column('team_two_score', Float, nullable=False),
-                Column('year', Integer, nullable=False),
-                Column('week', Integer, nullable=False))
-            
-            self.meta.create_all(self.con)
-
     def addUser(self,username,password):
         users = self.meta.tables['users']
 
@@ -137,4 +115,14 @@ class Database():
 
         matchups_year = matchups.select().where(or_(matchups.c.team_one == user,matchups.c.team_two == user)).where(matchups.c.year==year)
         return self.con.execute(matchups_year)
+
+    def getUserYearStats(self,user,year):
+        user_year_stats = self.meta.tables['user_year_stats']
+
+        return self.session.query(user_year_stats).filter(and_(user_year_stats.c.user==user,user_year_stats.c.year==year)).first()
+    
+    def getUserHistory(self,user):
+        user_year_stats = self.meta.tables['user_year_stats']
+
+        return self.session.query(user_year_stats).filter(user_year_stats.c.user==user).all()
 

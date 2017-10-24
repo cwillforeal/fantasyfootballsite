@@ -37,9 +37,9 @@ class CareerResults:
 
 class YearSummary:
     def __init__(self):
+        self.year=0
         self.user=None
         self.winTitle=False 
-        self.reg_season_wins=0
         self.reg_season_wins=0
         self.reg_season_loses=0
         self.playoff_wins=0
@@ -132,35 +132,23 @@ def getUserHistory(years_stats, user):
     first_run = True
     for year in years_stats:
         career_results.seasons = career_results.seasons + 1
-        week_cnt = 0
-        for week in year.week_results:
-            week_cnt = week_cnt + 1 
-            career_results.points_for = career_results.points_for +  week.team_score
-            career_results.points_against = career_results.points_against + week.opponent_score
-            if week.team_score > career_results.best_week:
-                career_results.best_week = week.team_score
-            if first_run == True:
-                career_results.worst_week = week.team_score
-                first_run = False
-            else:
-                if week.team_score < career_results.worst_week:
-                    career_results.worst_week = week.team_score 
-            if week.week < 100:
-                if week.win == True:
-                    career_results.reg_season_wins = career_results.reg_season_wins + 1
-                else:
-                    career_results.reg_season_loses = career_results.reg_season_loses + 1
-            elif week.week >= 100 and week.week < 200:
-                if week.win == True:
-                    career_results.playoff_wins = career_results.playoff_wins + 1
-                    if week_cnt >= len(year.week_results):
-                        career_results.titles.append(year.year)
-                else:
-                    career_results.playoff_loses = career_results.playoff_loses + 1
-            else:
-                if week.win == True:
-                    career_results.con_wins = career_results.con_wins + 1
-                else:
-                    career_results.con_loses = career_results.con_loses + 1
+        career_results.reg_season_wins = career_results.reg_season_wins + year.reg_season_wins
+        career_results.reg_season_loses = career_results.reg_season_loses + year.reg_season_loses
+        career_results.playoff_wins = career_results.playoff_wins + year.playoff_wins
+        career_results.playoff_loses = career_results.playoff_loses + year.playoff_loses
+        career_results.points_for = career_results.points_for + year.points_for
+        career_results.points_against = career_results.points_against + year.points_against
+        career_results.con_wins = career_results.con_wins + year.con_wins
+        career_results.con_loses = career_results.con_loses + year.con_loses
+        if year.best_week > career_results.best_week:
+            career_results.best_week = year.best_week 
+        if first_run == True:
+            career_results.worst_week = year.worst_week
+            first_run = False
+        else:
+            if year.worst_week < career_results.worst_week:
+                career_results.worst_week = year.worst_week
+        if year.won_title == True:
+            career_results.titles.append(year.year) 
 
     return(career_results)
